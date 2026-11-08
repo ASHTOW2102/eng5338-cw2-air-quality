@@ -31,6 +31,7 @@ All of this lives in [`src/cw2_common.py`](src/cw2_common.py). Import it and **d
 data/air-quality.csv                       UCI Air Quality dataset (CC BY 4.0)
 src/cw2_common.py                          shared protocol: data, features, split, CV, scorers, run_search()
 notebooks/ENG5338_CW2_notebook.ipynb       THE group notebook (submitted). M1 merges everyone's cells here.
+notebooks/members/m1_data_protocol_reference.ipynb   M1 working notebook (data, protocol, Linear/Ridge, overfitting)
 notebooks/members/m2_random_forest.ipynb   M2 working notebook
 notebooks/members/m3_hist_gradient_boosting.ipynb   M3
 notebooks/members/m4_svr_knn.ipynb         M4
@@ -69,7 +70,7 @@ from cw2_common import *
 ```
 
 **Rules:**
-1. Work **only in your own notebook** in `notebooks/members/`. Two people editing the same `.ipynb` causes merge conflicts that are painful to resolve.
+1. Everyone, M1 included, works **only in their own notebook** in `notebooks/members/`. Two people editing the same `.ipynb` causes merge conflicts that are painful to resolve.
 2. Always `git pull` before you start, then commit and push small changes often.
 3. Use `run_search(name, pipe, grid)` from `cw2_common` so every model has the same folds, metrics and train/val columns.
 4. **Never use `X_test`.** Only M5 scores it, once, on the agreed pipeline.
