@@ -1,7 +1,15 @@
 # ENG5338 CW2 — Virtual CO Sensor (UCI Air Quality)
 
-M1 notebook: `M1_air_quality.ipynb`
+Group notebook: `ENG5338_CW2_notebook.ipynb`
 
-Covers data cleaning and EDA, the engineering question and constraints, the shared protocol (chronological 80/20 split, `TimeSeriesSplit(5)`, scorers, `run_search` harness), the Linear Regression and Ridge reference models, and the start of the overfitting analysis.
+| Part | Owner | Content |
+|------|-------|---------|
+| A | M1 | Data cleaning, EDA, question & constraints, shared protocol (chronological 80/20 split, `TimeSeriesSplit(5)`, scorers, `run_search`), Linear/Ridge reference |
+| B | M2 | Random Forest |
+| C | M3 | HistGradientBoosting |
+| D | M4 | SVR / KNN |
+| E | M1 | Overfitting analysis |
+| F | M5 | Computational cost |
+| G | M5 | Final recommended pipeline, scored once on the test set |
 
 **To run:** put `air-quality.csv` in the same folder as the notebook, then run all cells. It needs numpy, pandas, scikit-learn, matplotlib and seaborn.
