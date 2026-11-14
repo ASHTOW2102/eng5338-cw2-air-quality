@@ -44,15 +44,15 @@ Then write the comments in your part **in your own words**.
 
 | Cell | What it does | Why |
 |---|---|---|
-| Regularised search | 8 configs: depth 10/20, leaf 5/10, max_features 0.7/sqrt | Limit overfitting |
+| Regularised search | 8 configs, 200 trees: depth 10/20, leaf 5/10, max_features 0.7/sqrt | Limit overfitting |
 | rf_final + test cell | A forest scored on the test set (**exploration only**, marked in the notebook) | Not used for selection |
 | Feature importance | S2 sensor ≈ 0.86 of the importance | One sensor carries most of the signal |
 | Error diagnosis by CO level | Error grows with CO; above 3.4 mg/m³ only ~40% within | High CO is the weak spot |
-| Improved grid | 400/600 trees, depth None/20, leaf 1/2 | Best RF: val MAE 0.369, 79.2% |
+| Improved grid | 200/300 trees, depth None/20, leaf 1/2 | Best RF: 300 trees, depth 20, leaf 2 → val MAE 0.369, 79.4% |
 | Log target | `TransformedTargetRegressor` with log1p | Tried to handle the skew; no gain (0.371) |
 | Sample weights | Extra weight on high-CO rows (1.5–8) | Tried to fix high-CO error; no gain (≈0.369–0.372) |
 
-**Likely questions:** Why is the RF gap large (0.28)? (Deep trees memorise the training data.) Why not pick RF? (Same accuracy as HGB, but 22.8 s to train and 134 MB vs 0.23 s and 191 KB.)
+**Likely questions:** Why is the RF gap large (0.28)? (Deep trees memorise the training data.) Why not pick RF? (Same accuracy as HGB, but 11 s to train and 67 MB vs 0.19 s and 191 KB.) **Why is RF slow?** Hundreds of deep trees, each checking all 12 features at every split. We cut it from 600 to 300 trees with the same accuracy, which halved its cost and the notebook's run time.
 
 ---
 
@@ -68,7 +68,7 @@ Then write the comments in your part **in your own words**.
 | C.10–C.12 | Permutation importance on the last fold | S2 sensor 0.68, then hour_sin, weekday |
 | C.13 | Overall OOF metrics | MAE 0.360, R² 0.82 |
 
-**Likely questions:** Why HGB over RF? (Same or better accuracy, 100× faster to train, 700× smaller, fit time almost flat as data grows → cheap to retrain for drift.) What does L2 / max_leaf_nodes do? (Both limit complexity → smaller overfitting gap.)
+**Likely questions:** Why HGB over RF? (Same or better accuracy, 60× faster to train, 350× smaller, fit time grows only slowly with more data → cheap to retrain for drift.) What does L2 / max_leaf_nodes do? (Both limit complexity → smaller overfitting gap.)
 
 ---
 
@@ -105,13 +105,13 @@ Then write the comments in your part **in your own words**.
 |---|---|---|
 | F–G | Initial benchmark with default models on one hold-out (**exploration**, marked) | First look at timing |
 | H.1 | Single-threaded timing: fit, batch ms/sample, single-row ms, size | A fair comparison (same thread count for every model) |
-| H.2 | Fit time at 25/50/75/100% of the data, exponent b | SVR b≈1.9 (quadratic), RF ≈1.1, HGB ≈0 |
+| H.2 | Fit time at 25/50/75/100% of the data, exponent b | SVR b≈1.9 (quadratic), RF ≈1.1, HGB ≈0.2 |
 | H.3 | Main table + accuracy-vs-cost plot | The report's main table |
 | H.4 | Selection rule (validation only) | Keep the models that meet C2 → none meets C1 → closest to C1 = HGB |
 | H.5–H.6 | Test set used **once** | MAE 0.350, 79.9% within: matches validation (80.8%) → no hidden overfitting |
 | H.7 | Error by CO level and month | Below 2 mg/m³ ≈ 87–93%; above 5 mg/m³ only 37% |
 
-**Likely questions:** Why single-threaded? (Fair comparison.) Single-row latency is 1.6–2 ms, so does C2 fail? (That's scikit-learn's per-call overhead; batch prediction is 0.009 ms. In production you'd batch or export the model.) What would change the recommendation? (Recalibration allowed, no retraining possible → SVR, a relative tolerance at high CO, strict single-call latency.)
+**Likely questions:** Why single-threaded? (Fair comparison.) Single-row latency is 1.6–2 ms, so does C2 fail? (That's scikit-learn's per-call overhead; batch prediction is 0.008 ms. In production you'd batch or export the model.) What would change the recommendation? (Recalibration allowed, no retraining possible → SVR, a relative tolerance at high CO, strict single-call latency.)
 
 ---
 
