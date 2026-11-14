@@ -1,6 +1,6 @@
 # ENG5338 CW2 — Virtual CO Sensor (UCI Air Quality)
 
-Group notebook: `ENG5338_CW2_notebook.ipynb`
+Group notebook: `ENG5338_CW2_notebook_AIR2.ipynb`
 
 | Part | Owner | Content |
 |------|-------|---------|
